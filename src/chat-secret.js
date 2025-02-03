@@ -6,13 +6,14 @@ import { SecretAIError, SecretAINetworkError } from './utils/errors.js';
  * ChatSecret Class - Manages chat interactions with the LLM.
  */
 export class ChatSecret {
-  constructor({ base_url, model, temperature, apiKey }) {
+  constructor({ base_url, model, temperature, apiKey, stream }) {
     if (!apiKey) throw new SecretAIError('API key is required.');
 
     this.apiKey = apiKey;
     this.baseUrl = base_url || DEFAULT_LLM_URL;
     this.model = model || DEFAULT_LLM_MODEL;
     this.temperature = temperature !== undefined ? temperature : 1.0;
+    this.stream = stream || false; // ✅ Default to false if undefined
 
     this.http = axios.create({
       baseURL: this.baseUrl,
@@ -20,8 +21,11 @@ export class ChatSecret {
     });
   }
 
-  async chat(messages, { stream = false } = {}) {
+  async chat(messages, options = {}) {
     if (!Array.isArray(messages)) throw new SecretAIError('messages must be an array.');
+
+    // Use instance-level stream setting, but allow override via options
+    const stream = options.stream !== undefined ? options.stream : this.stream;
 
     // 🔹 Ensure messages are in correct format: { role, content }
     const formattedMessages = messages.map(msg => {
@@ -39,7 +43,7 @@ export class ChatSecret {
         model: this.model,
         temperature: this.temperature,
         messages: formattedMessages,
-        stream
+        stream  // ✅ Uses either instance-level stream or method override
       });
 
       return response.data;
