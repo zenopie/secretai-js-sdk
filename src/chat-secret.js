@@ -1,4 +1,3 @@
-// src/chat-secret.js
 import axios from 'axios';
 import { DEFAULT_LLM_URL, DEFAULT_LLM_MODEL } from './config.js';
 import { SecretAIError, SecretAINetworkError } from './utils/errors.js';
@@ -21,12 +20,26 @@ export class ChatSecret {
     });
   }
 
-  async invoke(messages, { stream = false } = {}) {
+  async chat(messages, { stream = false } = {}) {
     if (!Array.isArray(messages)) throw new SecretAIError('messages must be an array.');
 
+    // 🔹 Ensure messages are in correct format: { role, content }
+    const formattedMessages = messages.map(msg => {
+      if (Array.isArray(msg) && msg.length === 2) {
+        return { role: msg[0], content: msg[1] };  // ✅ Convert ["role", "message"] → { role, content }
+      }
+      if (typeof msg === 'object' && msg.role && msg.content) {
+        return msg;  // ✅ Already correct format
+      }
+      throw new SecretAIError('Invalid message format.');
+    });
+
     try {
-      const response = await this.http.post('/invoke', {
-        messages, model: this.model, temperature: this.temperature, stream
+      const response = await this.http.post('/api/chat', {
+        model: this.model,
+        temperature: this.temperature,
+        messages: formattedMessages,
+        stream
       });
 
       return response.data;
