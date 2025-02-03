@@ -13,7 +13,7 @@ export class ChatSecret {
     this.baseUrl = base_url || DEFAULT_LLM_URL;
     this.model = model || DEFAULT_LLM_MODEL;
     this.temperature = temperature !== undefined ? temperature : 1.0;
-    this.stream = stream || false; // ✅ Default to false if undefined
+    this.stream = stream || false; 
 
     this.http = axios.create({
       baseURL: this.baseUrl,
@@ -21,11 +21,8 @@ export class ChatSecret {
     });
   }
 
-  async chat(messages, options = {}) {
+  async chat(messages) {
     if (!Array.isArray(messages)) throw new SecretAIError('messages must be an array.');
-
-    // Use instance-level stream setting, but allow override via options
-    const stream = options.stream !== undefined ? options.stream : this.stream;
 
     // 🔹 Ensure messages are in correct format: { role, content }
     const formattedMessages = messages.map(msg => {
@@ -43,7 +40,7 @@ export class ChatSecret {
         model: this.model,
         temperature: this.temperature,
         messages: formattedMessages,
-        stream  // ✅ Uses either instance-level stream or method override
+        stream: this.stream, 
       });
 
       return response.data;
