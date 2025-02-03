@@ -1,6 +1,6 @@
 {
     "name": "secretai",
-    "version": "0.0.2",
+    "version": "0.0.4",
     "description": "JavaScript SDK for Secret AI",
     "type": "module", 
     "main": "src/index.js",
