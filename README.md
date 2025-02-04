@@ -25,12 +25,12 @@ npm install secretai
 Here's an example of how to use the Secret AI SDK in JavaScript:
 
 ```javascript
-import { ChatSecret } from 'secretai';
+import { ChatSecret, SECRET_AI_CONFIG } from 'secretai';
 
 const secretAI = new ChatSecret({
     apiKey: 'YOUR-API-KEY',
-    base_url: 'https://ai1.scrtlabs.com:21434',
-    model: 'llama3.1:70b',
+    base_url: SECRET_AI_CONFIG.DEFAULT_LLM_URL,
+    model: SECRET_AI_CONFIG.DEFAULT_LLM_MODEL,
     temperature: 1.0
 });
 
