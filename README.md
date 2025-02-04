@@ -36,7 +36,7 @@ const secretAI = new ChatSecret({
 
 // Define messages to send to the AI
 const messages = [
-    { role: 'system', content: 'You are a helpful assistant that translates English to French.' },
+    { role: 'system', content: 'You are a helpful assistant that translates English to Spanish.' },
     { role: 'user', content: 'I love programming.' }
 ];
 
