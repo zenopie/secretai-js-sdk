@@ -5,7 +5,7 @@ export const LOG_LEVELS = {
 };
 
 export const API_KEY = 'SECRET_AI_API_KEY';
-export const DEFAULT_LLM_MODEL = 'llama3.1:70b';
+export const DEFAULT_LLM_MODEL = 'deepseek-r1:70b';
 export const DEFAULT_LLM_URL = 'https://ai1.scrtlabs.com:21434';
 
 export const SECRET_CHAIN_ID_DEFAULT = 'pulsar-3';
